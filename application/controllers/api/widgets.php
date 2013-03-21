@@ -9,30 +9,45 @@
  * @package		CodeIgniter
  * @subpackage	Rest Server
  * @category	Controller
- * @author		Phil Sturgeon
- * @link		http://philsturgeon.co.uk/code/
+ * @author		Adam Whitney
+ * @link		http://outergalactic.org/
 */
 
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
 require APPPATH.'/libraries/REST_Controller.php';
 
-class Example extends REST_Controller
+class Widgets extends REST_Controller
 {
-	function user_get()
+	function get()
     {
-        if(!$this->get('id'))
-        {
-        	$this->response(NULL, 400);
-        }
+    	if(!$this->_get('id'))
+    	{
+    		//$users = $this->some_model->getSomething( $this->get('limit') );
+    		$users = array(
+    		array('id' => 1, 'name' => 'Some Guy', 'email' => 'example1@example.com'),
+    		array('id' => 2, 'name' => 'Person Face', 'email' => 'example2@example.com'),
+    		3 => array('id' => 3, 'name' => 'Scotty', 'email' => 'example3@example.com', 'fact' => array('hobbies' => array('fartings', 'bikes'))),
+    		);
 
-        // $user = $this->some_model->getSomething( $this->get('id') );
+    		if($users)
+    		{
+    			$this->response($users, 200); // 200 being the HTTP response code
+    		}
+
+    		else
+    		{
+    			$this->response(array('error' => 'Couldn\'t find any users!'), 404);
+    		}
+    	}
+
+        // $user = $this->some_model->getSomething( $this->_get('id') );
     	$users = array(
 			1 => array('id' => 1, 'name' => 'Some Guy', 'email' => 'example1@example.com', 'fact' => 'Loves swimming'),
 			2 => array('id' => 2, 'name' => 'Person Face', 'email' => 'example2@example.com', 'fact' => 'Has a huge face'),
 			3 => array('id' => 3, 'name' => 'Scotty', 'email' => 'example3@example.com', 'fact' => 'Is a Scott!', array('hobbies' => array('fartings', 'bikes'))),
 		);
 		
-    	$user = @$users[$this->get('id')];
+    	$user = @$users[$this->_get('id')];
     	
         if($user)
         {
@@ -45,51 +60,28 @@ class Example extends REST_Controller
         }
     }
     
-    function user_post()
+    function post()
     {
+    	if(!$this->_get('id'))
+    	{
+    		var_dump($this->request->body);
+    	}
         //$this->some_model->updateUser( $this->get('id') );
-        $message = array('id' => $this->get('id'), 'name' => $this->post('name'), 'email' => $this->post('email'), 'message' => 'ADDED!');
+        $message = array('id' => $this->_get('id'), 'name' => $this->_post('name'), 'email' => $this->_post('email'), 'message' => 'ADDED!');
         
         $this->response($message, 200); // 200 being the HTTP response code
     }
     
-    function user_delete()
+    function delete()
     {
     	//$this->some_model->deletesomething( $this->get('id') );
-        $message = array('id' => $this->get('id'), 'message' => 'DELETED!');
+        $message = array('id' => $this->_get('id'), 'message' => 'DELETED!');
         
         $this->response($message, 200); // 200 being the HTTP response code
     }
-    
-    function users_get()
-    {
-        //$users = $this->some_model->getSomething( $this->get('limit') );
-        $users = array(
-			array('id' => 1, 'name' => 'Some Guy', 'email' => 'example1@example.com'),
-			array('id' => 2, 'name' => 'Person Face', 'email' => 'example2@example.com'),
-			3 => array('id' => 3, 'name' => 'Scotty', 'email' => 'example3@example.com', 'fact' => array('hobbies' => array('fartings', 'bikes'))),
-		);
-        
-        if($users)
-        {
-            $this->response($users, 200); // 200 being the HTTP response code
-        }
 
-        else
-        {
-            $this->response(array('error' => 'Couldn\'t find any users!'), 404);
-        }
-    }
-
-
-	public function send_post()
+	public function put()
 	{
-		var_dump($this->request->body);
-	}
-
-
-	public function send_put()
-	{
-		var_dump($this->put('foo'));
+		var_dump($this->_put('foo'));
 	}
 }

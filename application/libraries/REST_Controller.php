@@ -168,7 +168,7 @@ abstract class REST_Controller extends CI_Controller
 		}
 
 		// Set up our GET variables
-		$this->_get_args = array_merge($this->_get_args, $this->uri->ruri_to_assoc());
+		$this->_get_args = array_merge($this->_get_args, $this->uri->ruri_to_assoc(2));
 
 		$this->load->library('security');
 
@@ -268,13 +268,16 @@ abstract class REST_Controller extends CI_Controller
 			$this->response(array('status' => false, 'error' => 'Unsupported protocol'), 403);
 		}
 
+		// The object called is not reference by the controller and not a parameter to a single controller.
+		/*
 		$pattern = '/^(.*)\.('.implode('|', array_keys($this->_supported_formats)).')$/';
 		if (preg_match($pattern, $object_called, $matches))
 		{
 			$object_called = $matches[1];
 		}
+		*/
 
-		$controller_method = $object_called.'_'.$this->request->method;
+		$controller_method = $this->request->method;
 
 		// Do we want to log this method (if allowed by config)?
 		$log_method = !(isset($this->methods[$controller_method]['log']) AND $this->methods[$controller_method]['log'] == FALSE);
@@ -884,7 +887,7 @@ abstract class REST_Controller extends CI_Controller
 	 * @param boolean $xss_clean Whether the value should be XSS cleaned or not.
 	 * @return string The GET argument value.
 	 */
-	public function get($key = NULL, $xss_clean = TRUE)
+	protected function _get($key = NULL, $xss_clean = TRUE)
 	{
 		if ($key === NULL)
 		{
@@ -901,7 +904,7 @@ abstract class REST_Controller extends CI_Controller
 	 * @param boolean $xss_clean Whether the value should be XSS cleaned or not.
 	 * @return string The POST argument value.
 	 */
-	public function post($key = NULL, $xss_clean = TRUE)
+	protected function _post($key = NULL, $xss_clean = TRUE)
 	{
 		if ($key === NULL)
 		{
@@ -918,7 +921,7 @@ abstract class REST_Controller extends CI_Controller
 	 * @param boolean $xss_clean Whether the value should be XSS cleaned or not.
 	 * @return string The PUT argument value.
 	 */
-	public function put($key = NULL, $xss_clean = TRUE)
+	protected function _put($key = NULL, $xss_clean = TRUE)
 	{
 		if ($key === NULL)
 		{
@@ -935,7 +938,7 @@ abstract class REST_Controller extends CI_Controller
 	 * @param boolean $xss_clean Whether the value should be XSS cleaned or not.
 	 * @return string The DELETE argument value.
 	 */
-	public function delete($key = NULL, $xss_clean = TRUE)
+	protected function _delete($key = NULL, $xss_clean = TRUE)
 	{
 		if ($key === NULL)
 		{
@@ -1264,7 +1267,7 @@ abstract class REST_Controller extends CI_Controller
 	 */
 	protected function _format_jsonp($data = array())
 	{
-		return $this->get('callback').'('.json_encode($data).')';
+		return $this->_get('callback').'('.json_encode($data).')';
 	}
 
 }
