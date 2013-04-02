@@ -3,14 +3,14 @@
 /**
  * CodeIgniter Rest Controller
  *
- * A fully RESTful server implementation for CodeIgniter using one library, one config file and one controller.
+ * A fully RESTful server implementation for CodeIgniter using one library, one config file, and a controller for each resource.
  *
  * @package        	CodeIgniter
  * @subpackage    	Libraries
  * @category    	Libraries
- * @author        	Phil Sturgeon
+ * @author        	Adam Whitney (forked from Phil Sturgeon's REST_Controller class)
  * @license         http://philsturgeon.co.uk/code/dbad-license
- * @link			https://github.com/philsturgeon/codeigniter-restserver
+ * @link			https://github.com/awhitney42/codeigniter-restserver-resources
  * @version 		2.6.2
  */
 abstract class REST_Controller extends CI_Controller

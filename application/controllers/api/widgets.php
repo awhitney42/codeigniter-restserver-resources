@@ -18,70 +18,107 @@ require APPPATH.'/libraries/REST_Controller.php';
 
 class Widgets extends REST_Controller
 {
+	
 	function get()
     {
-    	if(!$this->_get('id'))
+    	// Example data for testing.
+    	$widgets = array(
+    			1 => array('id' => 1, 'name' => 'sprocket'),
+    			2 => array('id' => 2, 'name' => 'gear')
+    	);
+    	 
+    	$id = $this->_get('id');
+    	if(!$id)
     	{
-    		//$users = $this->some_model->getSomething( $this->get('limit') );
-    		$users = array(
-    		array('id' => 1, 'name' => 'Some Guy', 'email' => 'example1@example.com'),
-    		array('id' => 2, 'name' => 'Person Face', 'email' => 'example2@example.com'),
-    		3 => array('id' => 3, 'name' => 'Scotty', 'email' => 'example3@example.com', 'fact' => array('hobbies' => array('fartings', 'bikes'))),
-    		);
-
-    		if($users)
-    		{
-    			$this->response($users, 200); // 200 being the HTTP response code
-    		}
-
+    		//$widgets = $this->widgets_model->getWidgets();    		    		
+    		if($widgets)
+    			$this->response($widgets, 200); // 200 being the HTTP response code
     		else
-    		{
-    			$this->response(array('error' => 'Couldn\'t find any users!'), 404);
-    		}
+    			$this->response(array('error' => 'Couldn\'t find any widgets!'), 404);
     	}
 
-        // $user = $this->some_model->getSomething( $this->_get('id') );
-    	$users = array(
-			1 => array('id' => 1, 'name' => 'Some Guy', 'email' => 'example1@example.com', 'fact' => 'Loves swimming'),
-			2 => array('id' => 2, 'name' => 'Person Face', 'email' => 'example2@example.com', 'fact' => 'Has a huge face'),
-			3 => array('id' => 3, 'name' => 'Scotty', 'email' => 'example3@example.com', 'fact' => 'Is a Scott!', array('hobbies' => array('fartings', 'bikes'))),
-		);
-		
-    	$user = @$users[$this->_get('id')];
-    	
-        if($user)
-        {
-            $this->response($user, 200); // 200 being the HTTP response code
-        }
+        //$widget = $this->widgets_model->getWidget($id);
+    	$widget = @$widgets[$id]; // test code
 
+        if($widget)
+            $this->response($widget, 200); // 200 being the HTTP response code
         else
-        {
-            $this->response(array('error' => 'User could not be found'), 404);
-        }
+            $this->response(array('error' => 'Widget could not be found'), 404);
     }
     
     function post()
     {
-    	if(!$this->_get('id'))
-    	{
-    		var_dump($this->request->body);
-    	}
-        //$this->some_model->updateUser( $this->get('id') );
-        $message = array('id' => $this->_get('id'), 'name' => $this->_post('name'), 'email' => $this->_post('email'), 'message' => 'ADDED!');
-        
-        $this->response($message, 200); // 200 being the HTTP response code
+		$data = $this->_post_args;
+		try {
+			//$id = $this->widgets_model->createWidget($data);
+			$id = 3; // test code
+			//throw new Exception('Invalid request data', 400); // test code
+			//throw new Exception('Widget already exists', 409); // test code
+		} catch (Exception $e) {
+			// Here the model can throw exceptions like the following:
+			// * For invalid input data: new Exception('Invalid request data', 400)
+			// * For a conflict when attempting to create, like a resubmit: new Exception('Widget already exists', 409)
+			$this->response(array('error' => $e->getMessage()), $e->getCode());
+		}
+		if ($id) {
+			$widget = array('id' => $id, 'name' => $data['name']); // test code
+			//$widget = $this->widgets_model->getWidget($id);
+			$this->response($widget, 201); // 201 being the HTTP response code
+		} else
+			$this->response(array('error' => 'Widget could not be created'), 404);
     }
     
+    public function put()
+    {
+		$data = $this->_put_args;
+		try {
+			//$id = $this->widgets_model->updateWidget($data);
+			$id = $data['id']; // test code
+			//throw new Exception('Invalid request data', 400); // test code
+		} catch (Exception $e) {
+			// Here the model can throw exceptions like the following:
+			// * For invalid input data: new Exception('Invalid request data', 400)
+			// * For a conflict when attempting to create, like a resubmit: new Exception('Widget already exists', 409)
+			$this->response(array('error' => $e->getMessage()), $e->getCode());
+		}
+		if ($id) {
+			$widget = array('id' => $data['id'], 'name' => $data['name']); // test code
+			//$widget = $this->widgets_model->getWidget($id);
+			$this->response($widget, 200); // 200 being the HTTP response code
+		} else
+			$this->response(array('error' => 'Widget could not be found'), 404);
+    }
+        
     function delete()
     {
-    	//$this->some_model->deletesomething( $this->get('id') );
-        $message = array('id' => $this->_get('id'), 'message' => 'DELETED!');
-        
-        $this->response($message, 200); // 200 being the HTTP response code
-    }
+    	
+    	// Example data for testing.
+    	$widgets = array(
+    			1 => array('id' => 1, 'name' => 'sprocket'),
+    			2 => array('id' => 2, 'name' => 'gear'),
+    			3 => array('id' => 3, 'name' => 'nut')
+    	);
+    	
+    	$id = $this->_get('id');
+    	if(!$id)
+    	{
+    		$this->response(array('error' => 'An ID must be supplied to delete a widget'), 400);
+    	}
 
-	public function put()
-	{
-		var_dump($this->_put('foo'));
-	}
+        //$widget = $this->widgets_model->getWidget($id);
+    	$widget = @$widgets[$id]; // test code
+
+    	if($widget) {
+    		try {
+    			//$this->widgets_model->deleteWidget($id);
+    			//throw new Exception('Forbidden', 403); // test code
+    		} catch (Exception $e) {
+    			// Here the model can throw exceptions like the following:
+    			// * Client is not authorized: new Exception('Forbidden', 403)
+    			$this->response(array('error' => $e->getMessage()), $e->getCode());
+    		}
+    		$this->response($widget, 200); // 200 being the HTTP response code
+    	} else
+    		$this->response(array('error' => 'Widget could not be found'), 404);
+    }
 }
