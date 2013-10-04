@@ -146,6 +146,11 @@ abstract class REST_Controller extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		
+		// init objects
+		$this->request = new stdClass();
+		$this->response = new stdClass();
+		$this->rest = new stdClass();
 
 		$this->_zlib_oc = @ini_get('zlib.output_compression');
 
@@ -169,8 +174,6 @@ abstract class REST_Controller extends CI_Controller
 
 		// Set up our GET variables
 		$this->_get_args = array_merge($this->_get_args, $this->uri->ruri_to_assoc(2));
-
-		$this->load->library('security');
 
 		// This library is bundled with REST_Controller 2.5+, but will eventually be part of CodeIgniter itself
 		$this->load->library('format');
@@ -197,7 +200,7 @@ abstract class REST_Controller extends CI_Controller
 		// Which format should the data be returned in?
 		$this->response = new stdClass();
 		$this->response->format = $this->_detect_output_format();
-		
+
 		// Which format should the data be returned in?
 		$this->response->lang = $this->_detect_lang();
 
@@ -232,7 +235,7 @@ abstract class REST_Controller extends CI_Controller
 		}
 
 		// Use whatever database is in use (isset returns false)
-		elseif (@$this->db)
+		elseif (property_exists($this, "db"))
 		{
 			$this->rest->db = $this->db;
 		}
@@ -1089,7 +1092,7 @@ abstract class REST_Controller extends CI_Controller
 			return $this->_perform_ldap_auth($username, $password);
 		}
 
-		$valid_logins = & $this->config->item('rest_valid_logins');
+		$valid_logins = $this->config->item('rest_valid_logins');
 
 		if ( ! array_key_exists($username, $valid_logins))
 		{
@@ -1184,7 +1187,7 @@ abstract class REST_Controller extends CI_Controller
 			$this->_force_login($uniqid);
 		}
 
-		$valid_logins = & $this->config->item('rest_valid_logins');
+		$valid_logins = $this->config->item('rest_valid_logins');
 		$valid_pass = $valid_logins[$digest['username']];
 
 		// This is the valid response expected
