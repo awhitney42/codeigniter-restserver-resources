@@ -6,11 +6,11 @@
  * This is an example of a few basic user interaction methods you could use
  * all done with a hardcoded array.
  *
- * @package		CodeIgniter
+ * @package	CodeIgniter
  * @subpackage	Rest Server
  * @category	Controller
- * @author		Adam Whitney
- * @link		http://outergalactic.org/
+ * @author	Adam Whitney
+ * @link	http://outergalactic.org/
 */
 
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
@@ -19,7 +19,7 @@ require APPPATH.'/libraries/REST_Controller.php';
 class Widgets extends REST_Controller
 {
 	
-	function get()
+    function index_get()
     {
     	// Example data for testing.
     	$widgets = array(
@@ -27,7 +27,7 @@ class Widgets extends REST_Controller
     			2 => array('id' => 2, 'name' => 'gear')
     	);
     	 
-    	$id = $this->_get('id');
+    	$id = $this->get('id');
     	if(!$id)
     	{
     		//$widgets = $this->widgets_model->getWidgets();    		    		
@@ -46,7 +46,7 @@ class Widgets extends REST_Controller
             $this->response(array('error' => 'Widget could not be found'), 404);
     }
     
-    function post()
+    function index_post()
     {
 		$data = $this->_post_args;
 		try {
@@ -68,7 +68,7 @@ class Widgets extends REST_Controller
 			$this->response(array('error' => 'Widget could not be created'), 404);
     }
     
-    public function put()
+    public function index_put()
     {
 		$data = $this->_put_args;
 		try {
@@ -89,7 +89,7 @@ class Widgets extends REST_Controller
 			$this->response(array('error' => 'Widget could not be found'), 404);
     }
         
-    function delete()
+    function index_delete()
     {
     	
     	// Example data for testing.
@@ -99,7 +99,7 @@ class Widgets extends REST_Controller
     			3 => array('id' => 3, 'name' => 'nut')
     	);
     	
-    	$id = $this->_get('id');
+    	$id = $this->get('id');
     	if(!$id)
     	{
     		$this->response(array('error' => 'An ID must be supplied to delete a widget'), 400);
