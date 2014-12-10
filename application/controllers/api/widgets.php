@@ -19,7 +19,7 @@ require APPPATH.'/libraries/REST_Controller.php';
 class Widgets extends REST_Controller
 {
 	
-    function index_get()
+    function index_get($id = '')
     {
     	// Example data for testing.
     	$widgets = array(
@@ -27,8 +27,8 @@ class Widgets extends REST_Controller
     			2 => array('id' => 2, 'name' => 'gear')
     	);
     	 
-    	$id = $this->get('id');
-    	if(!$id)
+    	if (!$id) { $id = $this->get('id'); }
+    	if (!$id)
     	{
     		//$widgets = $this->widgets_model->getWidgets();    		    		
     		if($widgets)
@@ -89,7 +89,7 @@ class Widgets extends REST_Controller
 			$this->response(array('error' => 'Widget could not be found'), 404);
     }
         
-    function index_delete()
+    function index_delete($id = '')
     {
     	
     	// Example data for testing.
@@ -99,8 +99,8 @@ class Widgets extends REST_Controller
     			3 => array('id' => 3, 'name' => 'nut')
     	);
     	
-    	$id = $this->get('id');
-    	if(!$id)
+    	if (!$id) { $id = $this->get('id'); }
+    	if (!$id)
     	{
     		$this->response(array('error' => 'An ID must be supplied to delete a widget'), 400);
     	}
