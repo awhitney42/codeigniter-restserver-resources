@@ -1,3 +1,4 @@
 # CodeIgniter Rest Server Example
 
-An example controller that uses the fully RESTful server implementation https://github.com/chriskacerguis/codeigniter-restserver
+This project is out-of-date and not supported. Please see the original for an updated REST server here: https://github.com/chriskacerguis/codeigniter-restserver
+
